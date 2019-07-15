@@ -35,8 +35,37 @@ Corners are ordered in the following index in the return list:
 y
 '''
 def reorder_corners(corner_list):
-    #TODO
-    pass
+    orig_order = list(corner_list)
+    # for count, corner in enumerate(corner_list):
+    #     orig_order[corner] = count
+    order_dict = {}
+    corner_list.sort()
+    corner_sort_by_x = list(corner_list)
+    corner_list.sort(key=lambda x: x[1])
+    corner_sort_by_y = list(corner_list)
+    
+    corner = corner_sort_by_x[0]
+    index = corner_sort_by_y.index(corner)
+    if index <= 1:
+        order_dict[0] = corner
+        order_dict[3] = corner_sort_by_x[1]
+    else:
+        order_dict[3] = corner
+        order_dict[0] = corner_sort_by_x[1]
+    
+    corner = corner_sort_by_x[2]
+    index = corner_sort_by_y.index(corner)
+    if index <= 1:
+        order_dict[1] = corner
+        order_dict[2] = corner_sort_by_x[3]
+    else:
+        order_dict[2] = corner
+        order_dict[1] = corner_sort_by_x[3]
+
+    result = []
+    for i in range(4):
+        result.append(order_dict[i])
+    return result
 
 if __name__ == '__main__':
         filename = sys.argv[1]
@@ -45,6 +74,8 @@ if __name__ == '__main__':
 
         is_valid, corner_list = detect_corners(frame)
         print(is_valid)
+        print(corner_list)
+        corner_list = reorder_corners(corner_list)
         print(corner_list)
         cv2.imshow('Test Frame', frame)
         cv2.waitKey(0)
