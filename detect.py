@@ -35,15 +35,15 @@ Corners are ordered in the following index in the return list:
 y
 '''
 def reorder_corners(corner_list):
-    orig_order = list(corner_list)
-    # for count, corner in enumerate(corner_list):
-    #     orig_order[corner] = count
+    if len(corner_list) != 4:
+        return None
+
     order_dict = {}
     corner_list.sort()
     corner_sort_by_x = list(corner_list)
     corner_list.sort(key=lambda x: x[1])
     corner_sort_by_y = list(corner_list)
-    
+
     corner = corner_sort_by_x[0]
     index = corner_sort_by_y.index(corner)
     if index <= 1:
