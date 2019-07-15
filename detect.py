@@ -3,6 +3,8 @@
 from __future__ import print_function
 import cv2
 from ar_markers import detect_markers
+from transform import mapping
+import numpy as np
 import sys
 
 def detect_corners(frame):
@@ -18,6 +20,7 @@ def detect_corners(frame):
     if len(corners) == 4:
         is_valid = True
         corner_list = [corners[1], corners[2], corners[3], corners[4]]
+        corner_list = reorder_corners(corner_list)
 
     return is_valid, corner_list
 
@@ -68,15 +71,17 @@ def reorder_corners(corner_list):
     return result
 
 if __name__ == '__main__':
-        filename = sys.argv[1]
-        print('Press "q" to quit')
-        frame = cv2.imread(filename)
+    filename = sys.argv[1]
+    print('Press "q" to quit')
+    frame = cv2.imread(filename)
 
-        is_valid, corner_list = detect_corners(frame)
-        print(is_valid)
-        print(corner_list)
-        corner_list = reorder_corners(corner_list)
-        print(corner_list)
-        cv2.imshow('Test Frame', frame)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+    is_valid, corner_list = detect_corners(frame)
+    print(is_valid)
+    print(corner_list)
+
+    if corner_list != None:
+        dst = mapping((850, 400), np.float32(corner_list))
+        print(dst)
+    cv2.imshow('Test Frame', frame)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
